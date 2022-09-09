@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: <YOUR-REPO-NAME>
-Upstream-Contact: <YOUR-CONTACT (MAIL ADDRESS ETC.)>
+Upstream-Name: forensic-artifact-automation
+Upstream-Contact: jball77-git@protonmail.com
 Source: <https://github.com/sap/YOUR-REPO-NAME>
 Disclaimer: The code in this project may include calls to APIs ("API Calls") of
  SAP or third-party products or services developed outside of this project
@@ -24,14 +24,26 @@ Disclaimer: The code in this project may include calls to APIs ("API Calls") of
  you any rights to use or access any SAP External Product, or provide any third
  parties the right to use of access any SAP External Product, through API Calls.
 
-Files: <YOUR-FILE-OR-FOLDER-LIST>
-Copyright:  <YEARS-RELEVANT-FOR-YOUR-PROJECT> SAP SE or an SAP affiliate company and <YOUR-PROJECT-NAME> contributors
+Files: Invoke-LRCollection.ps1, Invoke-TriageCollection.ps1, Invoke-LocalUpload.ps1, Invoke-ArtifactDownload.ps1, Invoke-ArtifactProcessing.ps1
+Copyright:  2022 SAP SE or an SAP affiliate company and forensic-artifact-automation contributors
 License: Apache-2.0
 
-Files: <THIRD-PARTY-FILE-OR-FOLDER-LIST>
-Copyright: <COPYRIGHT-OF-THIRD-PARTY-CODE>
-License: <LICENSE-OF-THIRD-PARTY-CODE>
+Files: kape.exe, ArtifactCollector/Targets/
+Copyright: 2022 Kroll, LLC
+License: https://www.kroll.com/en/end-user-license-agreement
 
-Files: <ANOTHER-THIRD-PARTY-FILE-OR-FOLDER-LIST>
-Copyright: <COPYRIGHT-OF-ANOTHER-THIRD-PARTY-CODE>
-License: <LICENSE-OF-ANOTHER- THIRD-PARTY-CODE>
+Files: 7za.exe
+Copyright: 2022 Igor Pavlov
+License: GNU LGPL
+
+Files: surge-collect.exe
+Copyright: 2022 Volexity Inc.
+License: Surge Collect is distributed under the terms of the Surge End User License Agreement (EULA).
+
+Files: ArtifactCollector/AWS.Tools.4.1.13.0/
+Copyright: 2008-2019 Amazon.com, Inc
+Licence: https://aws.amazon.com/agreement/
+
+Files: ArtifactDowloader/AWS.Tools.4.1.13.0/
+Copyright: 2008-2019 Amazon.com, Inc
+Licence: https://aws.amazon.com/agreement/
