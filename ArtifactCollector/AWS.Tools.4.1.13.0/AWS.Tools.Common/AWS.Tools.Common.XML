@@ -1,0 +1,1656 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AWS.Tools.Common</name>
+    </assembly>
+    <members>
+        <member name="T:Amazon.PowerShell.Common.AWSCmdletHistoryBuffer">
+            <summary>
+            Execution history of AWS cmdlets, exposed as the $AWSHistory session variable.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCmdletHistoryBuffer.Commands">
+            <summary>
+            Exposes the inner command trace to the shell
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCmdletHistoryBuffer.LastCommand">
+            <summary>
+            Helper property to access the very last cmdlet that was run
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCmdletHistoryBuffer.LastServiceResponse">
+            <summary>
+            Helper property to access the very last service response that was recorded on
+            the last invocation.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCmdletHistoryBuffer.LastServiceRequest">
+            <summary>
+            Helper property to access the very last service response that was recorded on
+            the last invocation.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.AWSCmdletHistory">
+            <summary>
+            Records the responses and optionally requests that the cmdlet made, together
+            with other diagnostic info.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCmdletHistory.LastServiceResponse">
+            <summary>
+            Helper property to access the very last service response that was recorded
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCmdletHistory.LastServiceRequest">
+            <summary>
+            Helper property to access the very last service request that was recorded,
+            if request logging is turned on.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.HistoryBuffer`1">
+            <summary>
+            Simplistic fixed-size buffer implementation that can be used to
+            keep track of cmdlet exec history and the request/response calls 
+            that each cmdlet makes.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.AccessKey">
+            <summary>
+            The AWS access key for the user account. This can be a temporary access key
+            if the corresponding session token is supplied to the -SessionToken parameter.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.SecretKey">
+            <summary>
+            The AWS secret key for the user account. This can be a temporary secret key
+            if the corresponding session token is supplied to the -SessionToken parameter.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.SessionToken">
+            <summary>
+            The session token if the access and secret keys are temporary session-based credentials.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.ExternalID">
+            <summary>
+            The user-defined external ID to be used when assuming a role, if required by the role.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.MfaSerial">
+            <summary>
+            The MFA serial number to be used when assuming a role, if required by the role.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.RoleArn">
+            <summary>
+            The ARN of the role to assume for assume role credentials.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.SourceProfile">
+            <summary>
+            The name of the source profile to be used by assume role credentials.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.ProfileName">
+            <summary>
+            The user-defined name of an AWS credentials or SAML-based role profile containing
+            credential information. The profile is expected to be found in the secure credential
+            file shared with the AWS SDK for .NET and AWS Toolkit for Visual Studio. You can also
+            specify the name of a profile stored in the .ini-format credential file used with
+            the AWS CLI and other AWS SDKs.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.ProfileLocation">
+            <summary>
+            <para>
+            Used to specify the name and location of the ini-format credential file (shared with
+            the AWS CLI and other AWS SDKs)
+            </para>
+            <para>
+            If this optional parameter is omitted this cmdlet will search the encrypted credential
+            file used by the AWS SDK for .NET and AWS Toolkit for Visual Studio first.
+            If the profile is not found then the cmdlet will search in the ini-format credential
+            file at the default location: (user's home directory)\.aws\credentials.
+            </para>
+            <para>
+            If this parameter is specified then this cmdlet will only search the ini-format credential
+            file at the location given.
+            </para>
+            <para>
+            As the current folder can vary in a shell or during script execution it is advised
+            that you use specify a fully qualified path instead of a relative path.
+            </para>
+            </summary>
+            <remarks>
+            Note that the encrypted credential file is not supported on all platforms.
+            It will be skipped when searching for profiles on Windows Nano Server, Mac, and Linux platforms.
+            </remarks>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.Credential">
+            <summary>
+            An AWSCredentials object instance containing access and secret key information,
+            and optionally a token for session-based credentials.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCredentialsArgumentsFullCmdlet.NetworkCredential">
+            <summary>
+            Used with SAML-based authentication when ProfileName references a SAML role profile.
+            Contains the network credentials to be supplied during authentication with the
+            configured identity provider's endpoint. This parameter is not required if the
+            user's default network identity can or should be used during authentication.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.ClearAWSHistoryCmdlet">
+            <summary>
+            Clears the contents of the AWS cmdlet history buffer ($AWSHistory) in the current shell.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.SetAWSHistoryConfigurationCmdlet">
+            <summary>
+            <para>
+            Configures the $AWSHistory instance for the current session. 
+            </para>
+            <para>
+            A history buffer size of 0 disables overall AWS cmdlet activity recording and clears any data currently 
+            in the buffer. If the new size is smaller than the current data in the buffer, older records are deleted.
+            </para>
+            <para>
+            By default, only service responses are recorded for a cmdlet. Use the -EnableRequestRecording switch
+            to turn on tracing of service requests in the buffer.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetAWSHistoryConfigurationCmdlet.MaxCmdletHistory">
+            <summary>
+            The maximum number of AWS cmdlet invocations that will be held in the history buffer.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetAWSHistoryConfigurationCmdlet.MaxServiceCallHistory">
+            <summary>
+            The maximum number of service responses (and requests, if enabled)
+            that will be recorded for a single AWS cmdlet.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetAWSHistoryConfigurationCmdlet.RecordServiceRequests">
+            <summary>
+            If set, also records the service requests that a cmdlet makes. Default: Off.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.AWSWebIdentityCredentials">
+            <summary>
+            Represents an AWS session credential from the Web Identity Federation (WIF) API.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSWebIdentityCredentials.Expiration">
+            <summary>
+            The time when the token will expire.
+            </summary>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.AWSCmdletAttribute.ConstructFromReflectionOnlyContext(System.Reflection.CustomAttributeData)">
+            <summary>
+            Reflection-only contexts (as in coreclr reflection) do not allow us to cast a CustomAttributeData 
+            instance to the actual attribute type (whereas full framework environments do). This helper 
+            does the work of extracting the values supplied to the constructor and instantiates an instance
+            based on those values so outer reflection code can work with the real attribute type.
+            </summary>
+            <param name="cad"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.AWSClientCmdletAttribute.ConstructFromReflectionOnlyContext(System.Reflection.CustomAttributeData)">
+            <summary>
+            Reflection-only contexts (as in coreclr reflection) do not allow us to cast a CustomAttributeData 
+            instance to the actual attribute type (whereas full framework environments do). This helper 
+            does the work of extracting the values supplied to the constructor and instantiates an instance
+            based on those values so outer reflection code can work with the real attribute type.
+            </summary>
+            <param name="cad"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.AWSConstantClassSourceAttribute">
+            <summary>
+            <para>
+            Attribute used to tag parameters that expose ConstantClass-derived types, for which
+            parameter intellisense could be provided via either ValidateSet attribution or
+            parameter argument completion. 
+            </para>
+            <para>
+            Generated cmdlets do not use the actual attribute since we know the parameter type at 
+            generation time and can therefore easily emit the ValidateSet attribution or parameter
+            completer. For hand-coded cmdlets we have no reflected property type and don't want 
+            to write a C# parser! In thus scenario this attribute (a) is used to point the generator 
+            at the SDK type we should use to obtain the values and (b) easily marks parameters for 
+            our textual parser to spot.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSConstantClassSourceAttribute.ConstantClassType">
+            <summary>
+            The type name of the class derived from ConstantClass that contains the
+            valid values according to the service model for the parameter value.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.BaseCmdlet">
+            <summary>
+            Ultimate base class for the AWS cmdlet hierarchy; adds helper methods for error
+            and progress reporting. Cmdlets that need region or credential handling, or
+            communicate with AWS services in any way, should derive from ServiceCmdlet. 
+            </summary>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.ThrowError(System.Exception)">
+            <summary>
+            Summary to throw error based on inspection of the exception type.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.ThrowArgumentError(System.String,System.Object)">
+            <summary>
+            Helper to throw a terminating exception on detection of invalid argument(s)
+            </summary>
+            <param name="message">The message to emit to the error record</param>
+            <param name="errorSource">The source (parameter or cmdlet) reporting the error</param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.DisplayWarning(System.String)">
+            <summary>
+            Displays the specified warning message in the shell.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.ThrowArgumentError(System.String,System.Object,System.Exception)">
+            <summary>
+            Helper to throw a terminating exception on detection of invalid argument(s)
+            </summary>
+            <param name="message">The message to emit to the error record</param>
+            <param name="errorSource">The source (parameter or cmdlet) reporting the error</param>
+            <param name="innerException">The exception that occurred processing the parameter, if any</param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.ThrowExecutionError(System.String,System.Object,System.Exception)">
+            <summary>
+            Helper to throw an error occuring during service execution
+            </summary>
+            <param name="message">The message to emit to the error record</param>
+            <param name="errorSource">The source (parameter or cmdlet) reporting the error</param>
+            <param name="innerException">The exception that was caught, if any</param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.ConfirmShouldProceed(System.Boolean,System.String,System.String)">
+            <summary>
+            Helper to call ShouldProcess, mixing in usage of a -Force flag (more commonly used with
+            ShouldContinue, but we don't use that) to override prompting unless -WhatIf is specified.
+            The switch settings -WhatIf and -Confirm are retrieved from the invocation, since they
+            are added dynamically at runtime by the shell.
+            </summary>
+            <param name="force">True if the -Force switch has been set</param>
+            <param name="resourceIdentifiersText">Formatted string containing the identifiers of the resources to be operated on.</param>
+            <param name="operationName">The name of the operation to be run (usually cmdlet name plus service api name)</param>
+            <returns>True if the operation should proceed</returns>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.FormatParameterValuesForConfirmationMsg(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Returns formatted string containing the target of the operation for use in
+            confirmation messages. Collections are truncated to avoid message bloat.
+            </summary>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.GetFirstAssignedParameterValue(System.String[])">
+            <summary>
+            Inspects the bound parameters to return the first from the set that has a value.
+            Used when we are overriding the output for otherwise-void output cmdlets for -PassThru 
+            and the user had a choice of parameters to specify to mean the same underlying object
+            (eg Beanstalk's EnvironmentId or EnvironmentName). If no bound parameter is found, the 
+            routine yields null.
+            </summary>
+            <param name="parameterNames"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.ParameterWasBound(System.String)">
+            <summary>
+            Returns true if the supplied value type parameter, which corresponds to a nullable
+            value type in the execution context, was bound in our current invocation and therefore
+            is safe to take the value from.
+            </summary>
+            <param name="parameterName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.PreExecutionContextLoad(Amazon.PowerShell.Common.ExecutorContext)">
+            <summary>
+            Allows additional parameters to be added (manually)
+            to generated cmdlets and to transform the parameter value into
+            the equivalent generated parameter prior to populating the
+            execution context.
+            </summary>
+            <param name="context">
+            Newly constructed context. On entry to this routine, the Region
+            and Credentials members may have been set but no further parameter
+            load has occurred.
+            </param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.PostExecutionContextLoad(Amazon.PowerShell.Common.ExecutorContext)">
+            <summary>
+            Allows further transformation or manipulation of parameter values
+            loaded into the context before we commence processing.
+            </summary>
+            <param name="context">
+            The context with all parameters processed and ready for use in
+            service calls (or whatever processing the cmdlet performs).
+            </param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.WriteProgressRecord(System.String,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Writes progress record to the shell.
+            </summary>
+            <param name="activity"></param>
+            <param name="message"></param>
+            <param name="percentComplete"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.WriteProgressCompleteRecord(System.String,System.String)">
+            <summary>
+            Writes progress completed record to the shell.
+            </summary>
+            <param name="activity"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.WriteCredentialSourceDiagnostic(Amazon.PowerShell.Common.AWSPSCredentials)">
+            <summary>
+            Safely emit a diagnostic message indicating where the credentials we are about to use
+            originated from.
+            </summary>
+            <param name="awsPSCredentials"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.WriteCredentialSourceDiagnostic(System.String)">
+            <summary>
+            Emit a diagnostic message indicating where the credentials we are about to use
+            originated from.
+            </summary>
+            <param name="credentialSource"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.WriteRegionSourceDiagnostic(Amazon.PowerShell.Common.RegionSource,System.String)">
+            <summary>
+            Emit a diagnostic message indicating where the credentials we are about to use
+            originated from.
+            </summary>
+            <param name="regionSource"></param>
+            <param name="regionValue"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.WriteRegionSourceDiagnostic(System.String,System.String)">
+            <summary>
+            Emit a diagnostic message indicating where the credentials we are about to use
+            originated from.
+            </summary>
+            <param name="regionSource"></param>
+            <param name="regionValue"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.FormatCredentialSourceForDisplay(Amazon.PowerShell.Common.AWSPSCredentials)">
+            <summary>
+            Translates enum into a friendlier 'from xxx' display string
+            </summary>
+            <param name="creds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.BaseCmdlet.FormatRegionSourceForDisplay(Amazon.PowerShell.Common.RegionSource)">
+            <summary>
+            Translates enum into a friendlier 'from xxx' display string
+            </summary>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.ServiceCmdlet">
+            <summary>
+            Base class for all AWS cmdlets that interact with an AWS service in some way and
+            thus need region and credential support.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ServiceCmdlet.EndpointUrl">
+            <summary>
+            <para>
+            The endpoint to make the call against.
+            </para>
+            <para>
+            <b>Note:</b> This parameter is primarily for internal AWS use and is not required/should not be specified for 
+            normal usage. The cmdlets normally determine which endpoint to call based on the region specified to the -Region
+            parameter or set as default in the shell (via Set-DefaultAWSRegion). Only specify this parameter if you must
+            direct the call to a specific custom endpoint.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.AnonymousServiceCmdlet">
+            <summary>
+            Base class for all AWS cmdlets that interact with an AWS service in some way but can call
+            with anonymous user credentials.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AnonymousServiceCmdlet.EndpointUrl">
+            <summary>
+            <para>
+            The endpoint to make the call against.
+            </para>
+            <para>
+            <b>Note:</b> This parameter is primarily for internal AWS use and is not required/should not be specified for 
+            normal usage. The cmdlets normally determine which endpoint to call based on the region specified to the -Region
+            parameter or set as default in the shell (via Set-DefaultAWSRegion). Only specify this parameter if you must
+            direct the call to a specific custom endpoint.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.CmdletOutput.IsEnumerableOutput">
+            <summary>
+            True if the output data is an enumerable collection that we should
+            emit object-by-object to the pipe. Note that strings are enumerable
+            so we must test for that specific case.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.InitializeDefaultConfigurationCmdlet">
+            <summary>
+            <para>
+            Creates or updates the credential profile named 'default' and sets the profile, and optionally a region, 
+            as active in the current shell. The credential data to be stored in the 'default' profile can be provided 
+            from:
+            <ul>
+            <li>Supplied access and secret key parameters for AWS credentials</li>
+            <li>A pre-existing profile</li>
+            <li>A credentials object</li>
+            <li>Active credentials in the current shell (in the variable $StoredAWSCredentials)</li>
+            <li>EC2 role metadata (for instances launched with instance profiles)</li>
+            </ul>
+            A default region to assume when the default profile is active is also set using the -Region parameter,  
+            from a default region already set in the current shell or, if the cmdlet is executing on an EC2 instance,
+            from the instance metadata. If a region setting cannot be determined from a parameter or the shell you are 
+            prompted to select one.
+            </para>
+            <para>
+            Note that if run on an EC2 instance and you want to select a region other than the region containing the
+            instance you should supply the -Region parameter so that the cmdlet does not inspect EC2 instance metadata
+            to auto-discover the region.
+            </para>
+            <para>
+            In all cases a profile named 'default' will be created or updated to contain the specified credential and
+            region data. Note that if the credential source is another profile this cmdlet effectively copies the 
+            credential data from the source profile to the 'default' profile.
+            </para>
+            <para>
+            When the cmdlet exits the active credentials can be accessed in the shell via a variable named $StoredAWSCredentials. 
+            The active region can be found in the variable $StoredAWSRegion.
+            </para>
+            <para>
+            Note: For scripts written against earlier versions of this module this cmdlet can also be invoked with the alias <i>Initialize-AWSDefaults</i>.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.InitializeDefaultConfigurationCmdletParametersCmdlet.Region">
+            <summary>
+            The system name of an AWS region or an AWSRegion instance. This governs
+            the endpoint that will be used when calling service operations. Note that
+            the AWS resources referenced in a call are usually region-specific.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.InitializeDefaultConfigurationCmdletParametersCmdlet.ProfileLocation">
+            <summary>
+            <para>
+            Used to specify the name and location of the ini-format credential file (shared with
+            the AWS CLI and other AWS SDKs)
+            </para>
+            <para>
+            If this optional parameter is omitted this cmdlet will search the encrypted credential
+            file used by the AWS SDK for .NET and AWS Toolkit for Visual Studio first.
+            If the profile is not found then the cmdlet will search in the ini-format credential
+            file at the default location: (user's home directory)\.aws\credentials.
+            </para>
+            <para>
+            If this parameter is specified then this cmdlet will only search the ini-format credential
+            file at the location given.
+            </para>
+            <para>
+            As the current folder can vary in a shell or during script execution it is advised
+            that you use specify a fully qualified path instead of a relative path.
+            </para>
+            </summary>
+            <remarks>
+            Note that the encrypted credential file is not supported on all platforms.
+            It will be skipped when searching for profiles on Windows Nano Server, Mac, and Linux platforms.
+            </remarks>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.InitializeDefaultConfigurationCmdletParametersCmdlet.Scope">
+            <summary>
+            <para>
+            This parameter allows to specify the scope of the shell variables set by this cmdlet.
+            For details about variables scopes see https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.ClearDefaultConfigurationCmdlet">
+            <summary>
+            <para>
+            Clears the persisted credentials associated with the credential profile names 'default' and 'AWS PS Default', plus any 
+            credentials and region data currently set in the session's shell variables. To clear the stored default credentials only, 
+            use the -SkipShell parameter. To affect the current shell only, use the -SkipProfileStore parameter.
+            </para>
+            <para>
+            Note: For scripts written against earlier versions of this module this cmdlet can also be invoked with the alias <i>Clear-AWSDefaults</i>.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ClearDefaultConfigurationCmdlet.SkipShell">
+            <summary>
+            If set, the cmdlet will not clear the current shell state.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ClearDefaultConfigurationCmdlet.SkipProfileStore">
+            <summary>
+            If set, the cmdlet will not clear the 'default' and 'AWS PS Default' profiles held in the credentials store.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ClearDefaultConfigurationCmdlet.ProfileLocation">
+            <summary>
+            <para>
+            Used to specify the name and location of the ini-format credential file (shared with
+            the AWS CLI and other AWS SDKs)
+            </para>
+            <para>
+            If this optional parameter is omitted this cmdlet will search the encrypted credential
+            file used by the AWS SDK for .NET and AWS Toolkit for Visual Studio for the
+            'default' and 'AWS PS Default' profiles. If the profiles are not found then the
+            cmdlet will search in the ini-format credential file at the default location: (user's home directory)\.aws\credentials.
+            </para>
+            <para>
+            If this parameter is specified then this cmdlet will only search the ini-format credential
+            file at the location given.
+            </para>
+            <para>
+            As the current folder can vary in a shell or during script execution it is advised
+            that you use specify a fully qualified path instead of a relative path.
+            </para>
+            </summary>
+            <remarks>
+            Note that the encrypted credential file is not supported on all platforms.
+            It will be skipped when searching for profiles on Windows Nano Server, Mac, and Linux platforms.
+            </remarks>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ClearDefaultConfigurationCmdlet.Scope">
+            <summary>
+            <para>
+            This parameter allows to specify the scope of the shell variables to clear.
+            For details about variables scopes see https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes.
+            This parameter cannot be used when SkipShell is specified.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.GetAWSPowerShellVersionCmdlet">
+            <summary>
+            Writes version and copyright information for the AWSPowerShell integration to the shell. If the ListServices switch is specified
+            the services and their API versions supported by this module are also displayed.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetAWSPowerShellVersionCmdlet.ListServiceVersionInfo">
+            <summary>
+            If specified the cmdlet also lists all supported AWS services and their versions.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.AWSPSCredentials">
+            <summary>
+            Wrapper around a set of AWSCredentials (various leaf types) carrying credential data,
+            logical name and source info. $StoredAWSCredentials points to an instance of this and
+            the ToString() override allows us to display more useful info (the set name) than
+            what AWSCredentials on its own can at present.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.ICredentialsArgumentsMethods">
+            <summary>
+            Performs a search amongst a chain of credential parameters and provider methods to
+            arrive at at set of AWS credentials.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.SAMLCredentialCallbackState">
+            <summary>
+            Captures the PSHost and executing cmdlet state for use in our credential callback
+            handler.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SAMLCredentialCallbackState.Host">
+            <summary>
+            The execution host, used to display credential prompts
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SAMLCredentialCallbackState.CmdletNetworkCredentialParameter">
+            <summary>
+            Any PSCredential argument supplied to the current cmdlet invocation.
+            This overrides ShellNetworkCredentialParameter that may have been set 
+            in the shell when Set-AWSCredentials was invoked. The value is cleared
+            after use.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SAMLCredentialCallbackState.ShellNetworkCredentialParameter">
+            <summary>
+            Null or the value of the NetworkCredential parameter that was supplied
+            when the role profile was set active in the shell via Set-AWSCredentials.
+            If set, this credential is used if a more local scope credential cannot
+            be found in SelfNetworkCredentialParameter. This value is retained after 
+            use.
+            </summary>
+        </member>
+        <member name="F:Amazon.PowerShell.Common.AWSRegionArgumentsCmdlet.RegionParameterAlias">
+            <summary>
+            <para>
+            In some cases, the Region parameter collides with other parameters (e.g. RegionName on the Get-EC2Region cmdlet).
+            This alias is provided to specify the Region to be used for the API call in those cases.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSRegionArgumentsCmdlet.Region">
+            <summary>
+            <para>
+            The system name of an AWS region or an AWSRegion instance. This governs
+            the endpoint that will be used when calling service operations. Note that 
+            the AWS resources referenced in a call are usually region-specific.
+            </para>
+            <para>
+            If the Region parameter is supplied the cmdlet ignores the ProfileLocation
+            parameter.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSRegionArgumentsCmdlet.ProfileLocation">
+            <summary>
+            <para>
+            Used to specify the name and location of the ini-format credential file (shared with
+            the AWS CLI and other AWS SDKs). When supplied the cmdlet will attempt to read the
+            default region to be used from the credential file's default profile.
+            </para>
+            <para>
+            If this optional parameter is omitted this cmdlet will search the encrypted credential
+            file used by the AWS SDK for .NET and AWS Toolkit for Visual Studio first.
+            If the profile is not found then the cmdlet will search in the ini-format credential
+            file at the default location: (user's home directory)\.aws\credentials.
+            </para>
+            <para>
+            If this parameter is specified then this cmdlet will only search the ini-format credential
+            file at the location given.
+            </para>
+            <para>
+            As the current folder can vary in a shell or during script execution it is advised
+            that you use specify a fully qualified path instead of a relative path.
+            </para>
+            </summary>
+            <remarks>
+            Note that the encrypted credential file is not supported on all platforms.
+            It will be skipped when searching for profiles on Windows Nano Server, Mac, and Linux platforms.
+            </remarks>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCommonArgumentsCmdlet.Region">
+            <summary>
+            The system name of an AWS region or an AWSRegion instance. This governs
+            the endpoint that will be used when calling service operations. Note that 
+            the AWS resources referenced in a call are usually region-specific.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCommonArgumentsCmdlet.AccessKey">
+            <summary>
+            The AWS access key for the user account. This can be a temporary access key
+            if the corresponding session token is supplied to the -SessionToken parameter.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCommonArgumentsCmdlet.SecretKey">
+            <summary>
+            The AWS secret key for the user account. This can be a temporary secret key
+            if the corresponding session token is supplied to the -SessionToken parameter.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCommonArgumentsCmdlet.SessionToken">
+            <summary>
+            The session token if the access and secret keys are temporary session-based credentials.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCommonArgumentsCmdlet.ProfileName">
+            <summary>
+            The user-defined name of an AWS credentials or SAML-based role profile containing
+            credential information. The profile is expected to be found in the secure credential
+            file shared with the AWS SDK for .NET and AWS Toolkit for Visual Studio. You can also
+            specify the name of a profile stored in the .ini-format credential file used with 
+            the AWS CLI and other AWS SDKs.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCommonArgumentsCmdlet.ProfileLocation">
+            <summary>
+            <para>
+            Used to specify the name and location of the ini-format credential file (shared with
+            the AWS CLI and other AWS SDKs)
+            </para>
+            <para>
+            If this optional parameter is omitted this cmdlet will search the encrypted credential
+            file used by the AWS SDK for .NET and AWS Toolkit for Visual Studio first.
+            If the profile is not found then the cmdlet will search in the ini-format credential
+            file at the default location: (user's home directory)\.aws\credentials.
+            </para>
+            <para>
+            If this parameter is specified then this cmdlet will only search the ini-format credential
+            file at the location given.
+            </para>
+            <para>
+            As the current folder can vary in a shell or during script execution it is advised
+            that you use specify a fully qualified path instead of a relative path.
+            </para>
+            </summary>
+            <remarks>
+            Note that the encrypted credential file is not supported on all platforms.
+            It will be skipped when searching for profiles on Windows Nano Server, Mac, and Linux platforms.
+            </remarks>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCommonArgumentsCmdlet.Credential">
+            <summary>
+            An AWSCredentials object instance containing access and secret key information,
+            and optionally a token for session-based credentials.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSCommonArgumentsCmdlet.NetworkCredential">
+            <summary>
+            Used with SAML-based authentication when ProfileName references a SAML role profile. 
+            Contains the network credentials to be supplied during authentication with the 
+            configured identity provider's endpoint. This parameter is not required if the
+            user's default network identity can or should be used during authentication.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.NewCredentialCmdlet">
+            <summary>
+            <para>
+            Creates and returns an AWSCredentials object
+            </para>
+            <para>
+            Note: For scripts written against earlier versions of this module this cmdlet can also be invoked with the alias <i>New-AWSCredentials</i>.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.VariableScope">
+            <summary>
+            <para>
+            This enumerable represents PowerShell variables scopes as described in https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.SetCredentialCmdlet">
+            <summary>
+            <para>
+            Saves AWS credentials to persistent store (-StoreAs) or temporarily for the shell using shell variable $StoredAWSCredentials.
+            </para>
+            <para>
+            Note: For scripts written against earlier versions of this module this cmdlet can also be invoked with the alias <i>Set-AWSCredentials</i>.
+            </para>
+            </summary>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.SetCredentialCmdlet.SetUpIfFederatedCredentials(Amazon.PowerShell.Common.AWSPSCredentials)">
+            <summary>
+            update the custom state we have applied to hold the host and any network credential
+            the user has supplied to us as a shell default to fall back on if we get called to
+            show the password dialog
+            </summary>
+            <param name="currentCredentials"></param>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetCredentialsParametersCmdlet.StoreAs">
+            <summary>
+            <para>
+            The name to be used to identity the credentials in local storage. Use this with the -ProfileName parameter
+            on cmdlets to load the stored credentials.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetCredentialsParametersCmdlet.Scope">
+            <summary>
+            <para>
+            When saving AWS credentials to the shell variable $StoredAWSCredentials, this parameter allows to specify the scope of the variable.
+            For details about variables scopes see https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes.
+            This parameter cannot be used when StoreAs is specified.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.ClearCredentialCmdlet">
+            <summary>
+            <para>
+            Clears the set of AWS credentials currently set as default in the shell
+            </para>
+            <para>
+            Note: For scripts written against earlier versions of this module this cmdlet can also be invoked with the alias <i>Clear-AWSCredentials</i>.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ClearCredentialCmdlet.ProfileLocation">
+            <summary>
+            <para>
+            Used to specify the name and location of the ini-format credential file (shared with
+            the AWS CLI and other AWS SDKs)
+            </para>
+            <para>
+            If this optional parameter is omitted this cmdlet will search the encrypted credential
+            file used by the AWS SDK for .NET and AWS Toolkit for Visual Studio first.
+            If the profile is not found then the cmdlet will search in the ini-format credential
+            file at the default location: (user's home directory)\.aws\credentials.
+            </para>
+            <para>
+            If this parameter is specified then this cmdlet will only search the ini-format credential
+            file at the location given.
+            </para>
+            <para>
+            As the current folder can vary in a shell or during script execution it is advised
+            that you use specify a fully qualified path instead of a relative path.
+            </para>
+            </summary>
+            <remarks>
+            Note that the encrypted credential file is not supported on all platforms.
+            It will be skipped when searching for profiles on Windows Nano Server, Mac, and Linux platforms.
+            </remarks>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ClearCredentialCmdlet.Scope">
+            <summary>
+            <para>
+            This parameter allows to specify the scope of the variable $StoredAWSCredentials to clear.
+            For details about variables scopes see https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes.
+            This parameter cannot be used when ProfileName is specified.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.GetCredentialCmdlet">
+            <summary>
+            <para>
+            Returns an AWSCredentials object initialized with from either credentials currently set as default in the shell or saved and associated with the supplied name from the local credential store.
+            Optionally the cmdlet can list the names, types, and locations of all sets of credentials held in local stores.
+            </para>
+            <para>
+            Note: For scripts written against earlier versions of this module this cmdlet can also be invoked with the alias <i>Get-AWSCredentials</i>.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetCredentialCmdlet.ProfileName">
+            <summary>
+            The name associated with the credentials in local storage
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetCredentialCmdlet.ProfileLocation">
+            <summary>
+            <para>
+            Used to specify the name and location of the ini-format credential file (shared with
+            the AWS CLI and other AWS SDKs)
+            </para>
+            <para>
+            If this optional parameter is omitted this cmdlet will search the encrypted credential
+            file used by the AWS SDK for .NET and AWS Toolkit for Visual Studio first.
+            If the profile is not found then the cmdlet will search in the ini-format credential
+            file at the default location: (user's home directory)\.aws\credentials.
+            </para>
+            <para>
+            If this parameter is specified then this cmdlet will only search the ini-format credential
+            file at the location given.
+            </para>
+            <para>
+            As the current folder can vary in a shell or during script execution it is advised
+            that you use specify a fully qualified path instead of a relative path.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetCredentialCmdlet.ListProfile">
+            <summary>
+            Lists the names of all CredentialProfiles saved in local storage
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetCredentialCmdlet.ListProfileDetail">
+            <summary>
+            List the name, type, and location of all CredentialProfiles saved in local storage
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.SetSamlEndpointProfileCmdlet">
+            <summary>
+            Creates or updates an endpoint settings definition for use with SAML role profiles. The name of
+            the endpoint settings is used with the Set-AWSSamlRoleProfile and Set-AWSCredentials cmdlets to associate one or more
+            role profiles to a shared endpoint definition.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlEndpointProfileCmdlet.Endpoint">
+            <summary>
+            The endpoint to be used when authenticating users prior to requesting temporary role-
+            based AWS credentials. The full endpoint of the identity provider must be specified and
+            it must be a HTTPS-scheme URL.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlEndpointProfileCmdlet.StoreAs">
+            <summary>
+            The user-defined name to assign to the endpoint settings. This name will be used when creating or
+            accessing role profiles with the Set-AWSSamlRoleProfile cmdlet to set up and use role-based
+            credential profiles that use the endpoint to authenticate the user.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlEndpointProfileCmdlet.AuthenticationType">
+            <summary>
+            The authentication type (or protocol type) used when communicating with the endpoint.
+            If not configured for an endpoint 'Kerberos' is assumed.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.SetSamlRoleProfileCmdlet">
+            <summary>
+            <para>
+            Creates or updates role profiles for use with a SAML federated identity provider to obtain temporary
+            AWS credentials for roles the user is authorized to assume. The endpoint for authentication should have
+            been configured previously using Set-AWSSamlEndpoint. Once created the role profiles can be used to obtain
+            time-limited temporary AWS credentials by specifying the name of the role profile to the -ProfileName
+            parameter of the Set-AWSCredentials cmdlet or any cmdlet that makes calls to AWS service operations.
+            </para>
+            <para><br/><br/></para>
+            <para>
+            User authentication is not performed until AWS credentials are required, i.e. just prior to a service
+            operation call. Additionally if the credentials expire then the tools will automatically attempt to
+            re-authenticate the user to obtain fresh credentials. When a role profile is configured to use the
+            default logged-in user identity then this process happens silently. If a role profile is configured
+            to use an alternate identity (by specifying the -NetworkCredential parameter) the user is prompted to
+            re-enter their credentials prior to re-authentication.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlRoleProfileCmdlet.EndpointName">
+            <summary>
+            The name assigned to the endpoint definition that was previously registered using Set-AWSSamlEndpoint.
+            The endpoint definition contains the URL of the endpoint to be used to authenticate users prior to
+            vending temporary AWS credentials.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlRoleProfileCmdlet.PrincipalARN">
+            <summary>
+            <para>
+            The Amazon Resource Name (ARN) of the principal holding the role to be assumed when credentials are
+            requested following successful authentication. If specified the RoleARN parameter must also
+            be specified.
+            </para>
+            <para><br/><br/></para>
+            <para>
+            If neither of the PrincipalARN and RoleARN parameters are supplied and the user is authorized
+            to assume multiple roles the cmdlet will prompt to select the role that should be referenced
+            by the profile. The user is also prompted if ARNs are specified but cannot be found in the data
+            returned on successful authentication.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlRoleProfileCmdlet.RoleARN">
+            <summary>
+            <para>
+            The Amazon Resource Name (ARN) of the role to be assumed when credentials are requested following
+            successful authentication. If specified the PrincipalARN parameter must also be specified.
+            </para>
+            <para><br/><br/></para>
+            <para>
+            If neither of the PrincipalARN and RoleARN parameters are supplied and the user is authorized
+            to assume multiple roles the cmdlet will prompt to select the role that should be referenced
+            by the profile. The user is also prompted if ARNs are specified but cannot be found in the data
+            returned on successful authentication.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlRoleProfileCmdlet.NetworkCredential">
+            <summary>
+            <para>
+            Optional. Supply a value only if an identity different to the user's default Windows identity
+            should be used during authentication.
+            </para>
+            <para><br/><br/></para>
+            <para>
+            If an alternate credential is specified then when the tools need to re-authenticate the user
+            to obtain fresh credentials following expiry the user is prompted to re-enter the password
+            for the user account before re-authentication can be performed. When the default user identity
+            is configured for use (-NetworkCredential not specified) re-authentication occurs silently.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlRoleProfileCmdlet.StoreAs">
+            <summary>
+            The name to associate with the role data. This name will be used with the -ProfileName parameter
+            to Set-AWSCredentials cmdlet and AWS service cmdlets to load the profile and obtain temporary
+            AWS credentials based on the role and other data held in the profile.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlRoleProfileCmdlet.StoreAllRoles">
+            <summary>
+            If set all roles available to the user are evaluated following authentication and one
+            role profile per role will be created. The name of each role will be used for each
+            corresponding profile that is created.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetSamlRoleProfileCmdlet.STSEndpointRegion">
+            <summary>
+            <para>
+            Specifies the region to be used when making calls to STS to obtain temporary credentials
+            after successful authentication. 
+            </para>
+            <para>
+            This parameter is only needed in regions where a specific regional endpoint for STS must 
+            be used (eg cn-north-1). In all regions where the global sts.amazonaws.com endpoint can be 
+            used this parameter should not be specified.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.GetAWSServiceCmdlet">
+            <summary>
+            <para>
+            Returns the name of the AWS services supported by the current version of AWS Tools for PowerShell, optionally restricting
+            the scope of the search to a specific service which can be identified using one or more words from the service name or the
+            prefix applied to the nouns of cmdlets belonging to the service.
+            </para>
+            <para>
+            If no match is made, no data is output.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetAWSServiceCmdlet.Service">
+            <summary>
+            <para>
+            Matches the full or partial term supplied to the parameter value, which can be the service prefix
+            (for example 'EC2') or one or more terms from the service name (for example 'compute' or 'compute
+            cloud').
+            </para>
+            <para>
+            When partial names are used (as opposed to a prefix code) all services 
+            for which a match can be found are used to assist in the cmdlet results. A 
+            regular expression can always be supplied for the parameter value.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.GetCmdletNameCmdlet">
+            <summary>
+            <para>
+            Returns the name of the cmdlet that invokes a named Amazon Web Services service operation, optionally restricting the
+            scope of the search to a specific service which can be identified using one or more words from the service name or the
+            prefix applied to the nouns of cmdlets belonging to the service.
+            </para>
+            <para>
+            Returns the names and corresponding service operations for a specific Amazon Web Services service which can be identified
+            using one or more words from the service name or the  prefix applied to the nouns of cmdlets belonging to the service.
+            </para>
+            <para>
+            If no match is made, no data is output.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetCmdletNameCmdlet.ApiOperation">
+            <summary>
+            <para>
+            The name of the service operation (api) to search for. If not further restricted by
+            service prefix or service name, all cmdlets across all services are
+            inspected for a matching operation.
+            </para>
+            <para>
+            By default the value supplied for this parameter is treated as a simple whole-word pattern 
+            to match. If the -MatchWithRegex switch is set the value is used as a regular expression.
+            In both cases the search is case-insensitive/invariant culture.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetCmdletNameCmdlet.CmdletName">
+            <summary>
+            <para>
+            The name of the cmdlet to search for. If not further restricted by
+            service prefix or service name, all cmdlets across all services are
+            inspected.
+            </para>
+            <para>
+            By default the value supplied for this parameter is treated as a simple whole-word pattern 
+            to match. If the -MatchWithRegex switch is set the value is used as a regular expression.
+            In both cases the search is case-insensitive/invariant culture.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetCmdletNameCmdlet.MatchWithRegex">
+            <summary>
+            If set, the value supplied for the ApiOperation or CmdletName parameter is assumed to be a
+            regular expression. By default, the value supplied for ApiOperation or CmdletName are treated
+            as a simple case-insensitive whole-word pattern to match (the cmdlet will surround the value
+            with ^ and $ tokens automatically). If the switch is set no modification of the supplied value
+            is performed.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetCmdletNameCmdlet.Service">
+            <summary>
+            <para>
+            Restricts the search to the cmdlets belonging to services that match the full or 
+            partial term supplied to the parameter value, which can be the service prefix
+            (for example 'EC2') or one or more terms from the service name (for example
+            'compute' or 'compute cloud').
+            </para>
+            <para>
+            When partial names are used (as opposed to a prefix code) all services 
+            for which a match can be found are used to assist in the cmdlet results. A 
+            regular expression can always be supplied for the parameter value.
+            </para>
+            <para>
+            If this is the only parameter supplied to the cmdlet, the output will list all
+            of the cmdlets belonging to the services matching the search term, together 
+            with the corresponding service operation names. Note that for services with 'helper'
+            cmdlets that do not invoke a particular service operation the ServiceOperation member
+            for the cmdlet in the resulting output is left blank.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetCmdletNameCmdlet.AwsCliCommand">
+            <summary>
+            <para>
+            The AWS CLI command to match. For example 'aws ec2 describe-instances'. 
+            </para>
+            The cmdlet will make a best-effort to identify the owning service and the operation 
+            name by parsing the command using known conventions for the AWS CLI command format.
+            The 'aws' prefix may be omitted and any AWS CLI options (identified by the prefix
+            characters --) are skipped when parsing the value to identify the service code and
+            operation name elements.
+            </summary>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.GetCmdletNameCmdlet.ParseAwsCliCommand(System.String,System.String@,System.String@)">
+            <summary>
+            Parses a typical aws cli command to extract the service name and operation. Some flexibility is
+            allowed, to make it easy for users who are transcoding a cli sample to PowerShell.
+            </summary>
+            <param name="command">
+            Cli command to parse; as this was a parameter value that triggered a parameter set, we know it is not null.
+            </param>
+            <param name="serviceName"></param>
+            <param name="operationName"></param>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.AddLoggerCmdlet">
+            <summary>
+            Adds a single trace listener to the specified trace source. Given a name and file path, 
+            creates a TextWriterTraceListener with the given name and file path, and adds it to the 
+            listeners for the trace source.
+            <para>If Source is not specified, 'Amazon' is assumed, which represents all SDK API calls. 
+            In the case where there are multiple listeners for multiple sources, Trace calls for an
+            API will go to the most specific source only. For example, if one listener is added to 'Amazon.S3' and
+            another on 'Amazon', then S3 calls will only be logged to the former listener.</para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AddLoggerCmdlet.Name">
+            <summary>
+            The name of the logger.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AddLoggerCmdlet.LogFilePath">
+            <summary>
+            File path to write the log to.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AddLoggerCmdlet.TraceListener">
+            <summary>
+            Specify a custom trace listener object.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AddLoggerCmdlet.Source">
+            <summary>
+            Specify a source to log responses for.
+            <para>
+            Defaults to all responses (i.e. 'Amazon'). To limit to a specific service (for example DynamoDB), use 'Amazon.DynamoDB'.)
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.RemoveLoggerCmdlet">
+            <summary>
+            Remove a listener from and AWS API trace source.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.RemoveLoggerCmdlet.Source">
+            <summary>
+            Source to remove the listener from.
+            <para>
+            Examples: 'Amazon', or 'Amazon.DynamoDB'.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.RemoveLoggerCmdlet.Name">
+            <summary>
+            Name of the trace listener to remove.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.SetResponseLoggingCmdlet">
+            <summary>
+            Modify when to produce log entries.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetResponseLoggingCmdlet.Level">
+            <summary>
+            When to log responses.
+            </summary>
+            <remarks>
+            Must be one of 'Always', 'OnError', or 'Never'.
+            </remarks>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.SetProxyCmdlet">
+            <summary>
+            Sets AWS default proxy for the shell.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetProxyCmdlet.Hostname">
+            <summary>
+            Proxy server host
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetProxyCmdlet.Port">
+            <summary>
+            Proxy server port
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetProxyCmdlet.Username">
+            <summary>
+            Username to submit to the proxy server for authentication
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetProxyCmdlet.Password">
+            <summary>
+            Password to submit to the proxy server for authentication
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetProxyCmdlet.Credential">
+            <summary>
+            The credentials to submit to the proxy server for authentication
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetProxyCmdlet.BypassList">
+            <summary>
+            An array of regular expressions that describe URIs that do not use 
+            the proxy server when accessed.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetProxyCmdlet.BypassOnLocal">
+            <summary>
+            If specified, requests to local Internet resources do not use the configured proxy.
+            </summary>
+            <remarks>
+            Local requests are identified by the lack of a period (.) in the URI, as in http://webserver/, 
+            or access the local server, including http://localhost, http://loopback, or http://127.0.0.1
+            </remarks>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetProxyCmdlet.Scope">
+            <summary>
+            <para>
+            This parameter allows to specify the scope of the proxy configuration to set.
+            For details about variables scopes see https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.ClearProxyCmdlet">
+            <summary>
+            Clears AWS default proxy for the shell.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ClearProxyCmdlet.Scope">
+            <summary>
+            <para>
+            This parameter allows to specify the scope of the proxy configuration to clear.
+            For details about variables scopes see https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.ProxySettings">
+            <summary>
+            Proxy settings for AWS cmdlets
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ProxySettings.Hostname">
+            <summary>
+            Proxy host
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ProxySettings.Port">
+            <summary>
+            Proxy port
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ProxySettings.Credentials">
+            <summary>
+            Proxy credentials
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ProxySettings.BypassList">
+            <summary>
+            A collection of regular expressions denoting the set of endpoints for
+            which the configured proxy host will be bypassed.
+            </summary>
+            <remarks>
+             For more information on bypass lists 
+             see https://msdn.microsoft.com/en-us/library/system.net.webproxy.bypasslist%28v=vs.110%29.aspx.
+            </remarks>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ProxySettings.BypassOnLocal">
+            <summary>
+            If set true requests to local addresses bypass the configured proxy.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.PSHelpers">
+            <summary>
+            Collection of helpers for working with PowerShell objects
+            </summary>
+        </member>
+        <member name="M:Amazon.PowerShell.Common.PSHelpers.PSPathToAbsolute(System.Management.Automation.PathIntrinsics,System.String)">
+            <summary>
+            Converts a (possibly) relative path into an absolute one
+            </summary>
+            <param name="path">Current path</param>
+            <param name="relativeOrAbsolutePath">Path to convert</param>
+            <returns>Absolute path</returns>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.PublicIpRangesCmdlet">
+            <summary>
+            <para>
+            Returns the collection of current public IP address ranges for Amazon Web Services. Each address 
+            range instance contains the service key, host region and IP address range (in CIDR notation).
+            </para>
+            <para>
+            The cmdlet can optionally emit the set of currently known service keys, perform filtering of 
+            output by service key or region information or output the publication date and time of the
+            current information.
+            </para>
+            <para>
+            The information processed by this cmdlet is contained in a publicly accessible JSON-format file at
+            https://ip-ranges.amazonaws.com/ip-ranges.json. The information in this file is generated from our internal 
+            system-of-record and is authoritative. You can expect it to change several times per week and should poll 
+            accordingly
+            </para>
+            <para>
+            For more details on the public IP address range data for Amazon Web Services, 
+            see http://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.PublicIpRangesCmdlet.OutputServiceKeys">
+            <summary>
+            If set the cmdlet emits the collection of currently-known service keys
+            used in the address range data.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.PublicIpRangesCmdlet.OutputPublicationDate">
+            <summary>
+            If set the cmdlet emits the publication date and time of the data.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.PublicIpRangesCmdlet.ServiceKey">
+            <summary>
+            If set, contains one or more service keys to filter the output to.
+            This parameter can be used in conjunction with the Region parameter
+            to filter by region and service key.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.PublicIpRangesCmdlet.Region">
+            <summary>
+            If set, contains one or more region identifiers (e.g. "us-east-1", "global")
+            to filter the output to. This parameter can be used in conjunction with the
+            ServiceKey parameter to filter by region and service key.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.SetDefaultRegionCmdlet">
+            <summary>
+            <para>
+            Sets a default AWS region into the shell environment, accessible as $StoredAWSRegion.
+            </para>
+            <para>
+            <br/><br/>
+            <b>Note:</b> The regions available for tab completion to the -Region parameter were those known
+            at the time this module was built. Regions launched subsequent to the build will not be listed for
+            tab completion but can still be used by simply entering the region system name.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.SetDefaultRegionCmdlet.Scope">
+            <summary>
+            <para>
+            This parameter allows to specify the scope of the region configuration to set.
+            For details about variables scopes see https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.ClearDefaultRegionCmdlet">
+            <summary>
+            Clears any default AWS region set in the shell variable $StoredAWSRegion.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.ClearDefaultRegionCmdlet.Scope">
+            <summary>
+            <para>
+            This parameter allows to specify the scope of the region configuration to clear.
+            For details about variables scopes see https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.GetDefaultRegionCmdlet">
+            <summary>
+            Returns the current default AWS region for this shell, if any, as held in the shell variable $StoredAWSRegion.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.GetRegionCmdlet">
+            <summary>
+            <para>
+            Returns the set of available AWS regions.
+            </para>
+            <para>
+            <br/><br/>
+            <b>Note:</b> The regions listed as output for this cmdlet are those known
+            at the time this module was built. Regions launched subsequent to the build 
+            will not be listed in the output. The new regions can still be used with the
+            -Region parameter for cmdlets in this module by simply entering the region
+            system name (eg us-west-2, eu-west-3 etc).
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetRegionCmdlet.SystemName">
+            <summary>
+            <para>
+            If set returns an AWSRegion instance corresponding to the specified system name (e.g. us-west-2).
+            </para>
+            <para>
+            This parameter can also be used to return AWSRegion instances for the US GovCloud and China (Beijing)
+            regions by specifying the relevant system name.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetRegionCmdlet.IncludeChina">
+            <summary>
+            <para>
+            Include the China (Beijing) region in the returned collection of AWSRegion instances. 
+            Note that use of this region requires an alternate set of credentials.
+            </para>
+            <para>
+            This switch is ignored if the SystemName parameter is used to request a specific
+            AWSRegion instance. To return the specific China (Beijing) region, specify a
+            value of 'cn-north-1' for the SystemName parameter.
+            </para>
+            <para>Default: off.</para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetRegionCmdlet.IncludeGovCloud">
+            <summary>
+            <para>If set the returned collection includes 'Gov Cloud' region(s).</para>
+            <para>Default: off.</para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.GetRegionCmdlet.GovCloudOnly">
+            <summary>
+            <para>If set the returned collection contains only the 'Gov Cloud' region(s).</para>
+            <para>Default: off.</para>
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.AWSRegion">
+            <summary>
+            Information about a specific AWS region
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSRegion.Region">
+            <summary>
+            AWS system name for the region, for example 'us-west-2'. 
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSRegion.Name">
+            <summary>
+            The descriptive name for the region, for example 'US East (Virginia)'
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.AWSRegion.IsShellDefault">
+            <summary>
+            Set to true if the region is the current default for the shell
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.RemoveAWSCredentialProfileCmdlet.ProfileName">
+            <summary>
+            The name associated with the credential profile that is to be deleted.
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.RemoveAWSCredentialProfileCmdlet.ProfileLocation">
+            <summary>
+            <para>
+            Used to specify the name and location of the ini-format credential file (shared with
+            the AWS CLI and other AWS SDKs)
+            </para>
+            <para>
+            If this optional parameter is omitted this cmdlet will search the encrypted credential
+            file used by the AWS SDK for .NET and AWS Toolkit for Visual Studio first.
+            If the profile is not found then the cmdlet will search in the ini-format credential
+            file at the default location: (user's home directory)\.aws\credentials.
+            </para>
+            <para>
+            If this parameter is specified then this cmdlet will only search the ini-format credential
+            file at the location given.
+            </para>
+            <para>
+            As the current folder can vary in a shell or during script execution it is advised
+            that you use specify a fully qualified path instead of a relative path.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Amazon.PowerShell.Common.RemoveAWSCredentialProfileCmdlet.Force">
+            <summary>
+            Suppresses prompts for confirmation before proceeding to remove the specified credential profile.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.Base64StringParameterConverterAttribute">
+            <summary>
+            Converts strings and byte arrays to Base64 encoded strings.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.Base64StreamParameterConverterAttribute">
+            <summary>
+            Converts different input types to byte[] to be used for MemoryStream parameters.
+            Then performs a Base64 conversion on the array.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.MemoryStreamParameterConverterAttribute">
+            <summary>
+            Converts different input types to byte[] to be used for MemoryStream parameters
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Common.StreamParameterConverter">
+            <summary>
+            Converts different input types to System.IO.Stream. We are not using an
+            ArgumentTransformationAttribute for this because we don't want to risk creating
+            a stream (for example a FileStream) and then fail to dispose of it. So we will
+            instead wait to convert during the actual Cmdlet execution.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Utils.ProgressRunner">
+            <summary>
+            Class that runs a task on a background thread and reports
+            progress to the source cmdlet.
+            
+            Due to PowerShell limitation, cmdlet progress must be reported
+            from the thread the cmdlet is executing on.
+            </summary>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.ProgressRunner.#ctor(System.Management.Automation.Cmdlet)">
+            <summary>
+            Constructs the runner.
+            
+            Source cmdlet is used to WriteProgress.
+            All progress reports must be routed through the runner's Report method.
+            </summary>
+            <param name="sourceCmdlet"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.ProgressRunner.Report(System.String,System.Int32,System.String)">
+            <summary>
+            Reports the status to the shell
+            </summary>
+            <param name="activity"></param>
+            <param name="percentComplete"></param>
+            <param name="statusDescription"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.ProgressRunner.Run(System.Action,Amazon.PowerShell.Utils.ProgressTracker)">
+            <summary>
+            Starts execution of the main action and begins
+            processing progress records.
+            </summary>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.ProgressRunner.SafeRun(System.Action,Amazon.PowerShell.Utils.ProgressTracker)">
+            <summary>
+            Calls the Run method and returns a new CmdletOutput instance.
+            If an exception was thrown, it will be stored in CmdletOutput.ErrorResponse
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.ProgressRunner.SafeRun(System.Action,Amazon.PowerShell.Utils.ProgressTracker,Amazon.PowerShell.Common.CmdletOutput)">
+            <summary>
+            Calls the Run method, posting input into the supplied CmdletOutput instance.
+            If an exception was thrown, it will be stored in CmdletOutput.ErrorResponse
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Amazon.PowerShell.Utils.ProgressTracker">
+            <summary>
+            Base, non-generic class for tracking an activity and reporting the progress.
+            </summary>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.ProgressTracker.#ctor(Amazon.PowerShell.Utils.ProgressRunner)">
+            <summary>
+            Constructs a tracker to work with a given ProgressRunner.
+            The subscribe action must subscribe the specified handler to the
+            even the tracker will be listening to.
+            </summary>
+            <param name="runner"></param>
+        </member>
+        <member name="P:Amazon.PowerShell.Utils.ProgressTracker.Activity">
+            <summary>
+            Name of the activity.
+            </summary>
+        </member>
+        <member name="T:Amazon.PowerShell.Utils.ProgressTracker`1">
+            <summary>
+            Class that tracks progress of an activity through event callbacks
+            and reports the activity to a ProgressRunner.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.ProgressTracker`1.#ctor(Amazon.PowerShell.Utils.ProgressRunner,System.Action{System.EventHandler{`0}})">
+            <summary>
+            Constructs a tracker to work with a given ProgressRunner.
+            The subscribe action must subscribe the specified handler to the
+            even the tracker will be listening to.
+            </summary>
+            <param name="runner"></param>
+            <param name="subscribe"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.ProgressTracker`1.ReportProgress(`0)">
+            <summary>
+            Abstract method to process event data. Must be overriden by subclass.
+            If progress has changed, should invoke ReportProgress to update shell.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.Common.QueryOSPlatform">
+            <summary>
+            Probes to discover the OS we are running on. Environment.OSVersion is not available
+            on CoreCLR. We return a string rather than OSPlatform to avoid the need to expose
+            the nuget package to our AWSPowerShell module (plus we only really need the name 
+            anyway).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.Common.WriteVerboseEndpointMessage(System.Management.Automation.Cmdlet,Amazon.Runtime.IClientConfig,System.String,System.String)">
+            <summary>
+            Outputs a verbose mode message stating the url or region we are about to call
+            for a given service operation.
+            </summary>
+            <param name="cmdlet"></param>
+            <param name="clientConfig"></param>
+            <param name="serviceName"></param>
+            <param name="operationName"></param>
+        </member>
+        <member name="M:Amazon.PowerShell.Utils.Common.WriteVerboseEndpointMessage(System.Management.Automation.Cmdlet,Amazon.Runtime.IClientConfig,System.String)">
+            <summary>
+            Outputs a verbose mode message stating the url or region we are about to call for a pre-formatted operation
+            message.
+            </summary>
+            <param name="cmdlet"></param>
+            <param name="clientConfig"></param>
+            <param name="operationMessage"></param>
+        </member>
+    </members>
+</doc>
