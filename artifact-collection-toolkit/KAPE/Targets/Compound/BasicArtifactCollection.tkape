@@ -1,0 +1,74 @@
+Description: Basic Artifact collection
+Author: Dominik Auracher (BMW Group)
+Version: 1.0
+Id: e11b9e28-2bd2-47bf-afa3-b84e01b06adc
+RecreateDirectories: true
+Targets:
+    -
+        Name: Antivirus
+        Category: Antivirus
+        Path: Antivirus.tkape
+    -
+        Name: CloudStorage_Metadata
+        Category: Apps
+        Path: CloudStorage_Metadata.tkape
+    -
+        Name: CombinedLogs
+        Category: WindowsLogs
+        Path: CombinedLogs.tkape
+    -
+        Name: EvidenceOfExecution
+        Category: EvidenceOfExecution
+        Path: EvidenceOfExecution.tkape
+    -
+        Name: FileSystem
+        Category: FileSystem
+        Path: FileSystem.tkape
+    -
+        Name: LNKFilesAndJumpLists
+        Category: LNKFiles
+        Path: LNKFilesAndJumpLists.tkape
+    -
+        Name: RecycleBin_InfoFiles
+        Category: RecycleBin_InfoFiles
+        Path: RecycleBin_InfoFiles.tkape
+    -
+        Name: RegistryHives
+        Category: Registry
+        Path: RegistryHives.tkape
+    -
+        Name: RemoteAccess
+        Category: ApplicationLogs
+        Path: RemoteAdmin.tkape
+    -
+        Name: ScheduledTasks
+        Category: ScheduledTasks
+        Path: ScheduledTasks.tkape
+    -
+        Name: SRUM
+        Category: Execution
+        Path: SRUM.tkape
+    -
+        Name: SUM
+        Category: Logs
+        Path: SUM.tkape
+    -
+        Name: ThumbCache
+        Category: FileKnowledge
+        Path: Thumbcache.tkape
+    -
+        Name: WBEM
+        Category: WBEM
+        Path: WBEM.tkape
+    -
+        Name: WindowsIndexSearch
+        Category: FileKnowledge
+        Path: WindowsIndexSearch.tkape
+    -
+        Name: WindowsTimeline
+        Category: EvidenceOfExecution
+        Path: WindowsTimeline.tkape
+    -
+        Name: Windows Subsystem for Linux
+        Category: WSL
+        Path: WSL.tkape
