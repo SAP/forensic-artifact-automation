@@ -35,7 +35,7 @@ $buildVariables = @{
 ### Encrypting uploaded files
 If you want to encrypt the artifacts before uploading them, you can use the switch `-EncryptUpload` when triggering the artifact collection either via Microsoft Defender Live Response or in the direct call. The following example shows the usage:
 ```PowerShell
-PS> .\Invoke-ArtifactCollection.ps1 -Case CM-1234 -EncryptUpload
+PS> .\Invoke-ArtifactCollection.ps1 -Case <Case number> -EncryptUpload
 ```
 
 In case you always want to encrypt files before uploading them, you can also update the related build variable. Set `encryptionMandatory` to `$true` to activate it per default or `$false` to only have encryption on demand:
@@ -86,7 +86,7 @@ KAPE allows the generation of custom targets and modules. To learn more about th
 After the extension of the KAPE targets and modules, you may need to adjust the switches and conditions for the script execution. Therefore, you need to change or extend a couple of functions:
 
 * **[Microsoft Defender Live-Response script (Invoke-ArtifactCollection.ps1)](/Invoke-ArtifactCollection.ps1):** In this script you should adjust the parameters at the very beginning as well as the parameters of the function `Invoke-ArtifactCollection`. Furthermore at the end of the function `Invoke-ArtifactCollection` there is a check for switches and the call of the second script which also needs to be adjusted. The last adjustment in this script is the function call at the end of the whole PowerShell-script file.
-* **[Artifact collection script (Invoke-ArtifactCollection.ps1)](/artifact-collection-toolkit/Invoke-ArtifactCollection.ps1):** For this script you also should update the overall parameters and the parameters of the function `Invoke-ArtifactCollection`. Additionally to that, within the `Invoke-ArtifactCollection` function is a self-elevating section to adjust as well and at the end there is the function call which also needs some update.
+* **[Artifact collection script (Invoke-TriageCollection.ps1)](/artifact-collection-toolkit/Invoke-ArtifactCollection.ps1):** For this script you also should update the overall parameters and the parameters of the function `Invoke-ArtifactCollection`. Additionally to that, within the `Invoke-ArtifactCollection` function is a self-elevating section to adjust as well and at the end there is the function call which also needs some update.
 
 ### AWS PowerShell-Tools
 Additionally to KAPE, the Artifact Collection Toolkit uses the AWS PowerShell-Tools. By default, the build script fetches the latest minor version of version 4 from the AWS-tools directly from their website. In case you need a specific version, host the version within your own environment or want to update the version somewhen in the future, you can adjust the download URL in the build script ([Build-ArtifactCollectionToolkit.ps1](/Build-ArtifactCollectionToolkit.ps1)):
